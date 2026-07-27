@@ -20,3 +20,4 @@ https://aamirmursleen.github.io/waqueen-qa/
 - Fail means the expected result did not match.
 - Skip means the feature is unavailable or test data is missing.
 - Every Fail needs screenshot or Loom/video evidence.
+- The PDF button downloads a simple daily QA report from the current browser state.
