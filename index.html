@@ -1,0 +1,2032 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WAQueen QA Checklist</title>
+  <style>
+    :root {
+      --bg: #f5f7f2;
+      --panel: #ffffff;
+      --soft: #eef3ee;
+      --ink: #17201b;
+      --muted: #5d6a62;
+      --line: #dbe4db;
+      --mint: #0f7c59;
+      --mint-soft: #e4f5ec;
+      --amber: #98620e;
+      --amber-soft: #fff1d5;
+      --red: #b42334;
+      --red-soft: #ffe4e8;
+      --blue: #1f5f9f;
+      --blue-soft: #e4efff;
+      --violet: #6d3aa8;
+      --violet-soft: #efe7ff;
+      --shadow: 0 18px 44px rgba(24, 33, 27, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.74), rgba(245, 247, 242, 0.96)),
+        var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    a { color: inherit; }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: 0;
+    }
+
+    textarea {
+      min-height: 82px;
+      resize: vertical;
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 24px 0 44px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid rgba(219, 228, 219, 0.88);
+      background: rgba(245, 247, 242, 0.9);
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar-inner {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 66px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .mark {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--mint);
+      color: white;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .brand-text {
+      min-width: 0;
+    }
+
+    .brand-title {
+      display: block;
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand-subtitle {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 650;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 370px;
+      gap: 18px;
+      align-items: start;
+      padding-top: 22px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: var(--shadow);
+    }
+
+    .intro {
+      padding: 24px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--mint);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 880px;
+      font-size: clamp(32px, 5vw, 56px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      margin: 16px 0 0;
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .notice {
+      margin-top: 18px;
+      display: grid;
+      gap: 8px;
+      border: 1px solid #f1c27d;
+      border-radius: 8px;
+      background: var(--amber-soft);
+      padding: 14px;
+      color: #5e3d08;
+      font-size: 14px;
+    }
+
+    .notice strong { color: #3b2604; }
+
+    .setup-panel {
+      padding: 18px;
+    }
+
+    .field-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 750;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfa;
+      color: var(--ink);
+      padding: 11px 12px;
+      font-size: 14px;
+      outline: 0;
+      transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    }
+
+    textarea {
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: rgba(15, 124, 89, 0.55);
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(15, 124, 89, 0.14);
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .metric {
+      min-height: 88px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 14px;
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 750;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .metric-value {
+      margin-top: 8px;
+      font-size: 30px;
+      line-height: 1;
+      font-weight: 850;
+      letter-spacing: 0;
+    }
+
+    .progress-wrap {
+      margin-top: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 12px;
+    }
+
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .progress-track {
+      overflow: hidden;
+      height: 12px;
+      border-radius: 999px;
+      background: #e4e9e2;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--mint), #2f7fbf, #6d3aa8);
+      transition: width 180ms ease;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      margin: 18px 0;
+    }
+
+    .search-wrap {
+      position: relative;
+    }
+
+    .search-wrap input {
+      padding-left: 38px;
+    }
+
+    .search-wrap::before {
+      content: "Search";
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: transparent;
+      width: 18px;
+      height: 18px;
+      border: 2px solid #7d8a82;
+      border-radius: 50%;
+    }
+
+    .search-wrap::after {
+      content: "";
+      position: absolute;
+      left: 27px;
+      top: 33px;
+      width: 8px;
+      height: 2px;
+      border-radius: 999px;
+      background: #7d8a82;
+      transform: rotate(45deg);
+      pointer-events: none;
+    }
+
+    .btn {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--ink);
+      padding: 10px 13px;
+      font-size: 14px;
+      font-weight: 800;
+      transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn:focus-visible { outline: 3px solid rgba(15, 124, 89, 0.22); outline-offset: 2px; }
+    .btn-primary { border-color: var(--mint); background: var(--mint); color: white; }
+    .btn-blue { border-color: rgba(31, 95, 159, 0.35); background: var(--blue-soft); color: #173d65; }
+    .btn-red { border-color: rgba(180, 35, 52, 0.35); background: var(--red-soft); color: #7a1020; }
+
+    .section-nav {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 2px 0 12px;
+      scrollbar-width: thin;
+    }
+
+    .section-chip {
+      min-height: 38px;
+      flex: 0 0 auto;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--muted);
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .section-chip.active {
+      border-color: rgba(15, 124, 89, 0.45);
+      background: var(--mint-soft);
+      color: var(--mint);
+    }
+
+    .section {
+      margin-top: 18px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 23px;
+      line-height: 1.18;
+      letter-spacing: 0;
+    }
+
+    .section-meta {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .test-card {
+      display: grid;
+      gap: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 16px;
+      box-shadow: 0 10px 28px rgba(24, 33, 27, 0.05);
+    }
+
+    .test-card[data-status="pass"] { border-color: rgba(15, 124, 89, 0.45); box-shadow: 0 0 0 2px rgba(15, 124, 89, 0.08); }
+    .test-card[data-status="fail"] { border-color: rgba(180, 35, 52, 0.45); box-shadow: 0 0 0 2px rgba(180, 35, 52, 0.08); }
+    .test-card[data-status="skip"] { border-color: rgba(31, 95, 159, 0.42); box-shadow: 0 0 0 2px rgba(31, 95, 159, 0.08); }
+
+    .card-top {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .test-title {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .status-pill {
+      min-width: 72px;
+      border-radius: 999px;
+      padding: 5px 9px;
+      text-align: center;
+      color: var(--muted);
+      background: var(--soft);
+      font-size: 11px;
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .status-pass { background: var(--mint-soft); color: var(--mint); }
+    .status-fail { background: var(--red-soft); color: var(--red); }
+    .status-skip { background: var(--blue-soft); color: var(--blue); }
+
+    .link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .link-row a {
+      display: inline-flex;
+      max-width: 100%;
+      min-height: 32px;
+      align-items: center;
+      border-radius: 8px;
+      background: var(--soft);
+      padding: 6px 9px;
+      color: var(--ink);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      font-weight: 750;
+      overflow-wrap: anywhere;
+      text-decoration: none;
+    }
+
+    .card-label {
+      margin: 0 0 5px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .steps,
+    .expected {
+      margin: 0;
+      color: var(--ink);
+      font-size: 14px;
+    }
+
+    .steps {
+      padding-left: 20px;
+    }
+
+    .steps li + li {
+      margin-top: 4px;
+    }
+
+    .expected {
+      border-left: 3px solid var(--mint);
+      padding-left: 10px;
+    }
+
+    .status-actions {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .status-btn {
+      min-height: 40px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .status-btn[aria-pressed="true"][data-value="pass"] { border-color: rgba(15, 124, 89, 0.55); background: var(--mint-soft); color: var(--mint); }
+    .status-btn[aria-pressed="true"][data-value="fail"] { border-color: rgba(180, 35, 52, 0.55); background: var(--red-soft); color: var(--red); }
+    .status-btn[aria-pressed="true"][data-value="skip"] { border-color: rgba(31, 95, 159, 0.55); background: var(--blue-soft); color: var(--blue); }
+
+    .fail-help {
+      display: none;
+      border: 1px solid rgba(180, 35, 52, 0.25);
+      border-radius: 8px;
+      background: var(--red-soft);
+      padding: 9px 10px;
+      color: #7a1020;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .test-card[data-status="fail"] .fail-help {
+      display: block;
+    }
+
+    .script {
+      margin-top: 24px;
+      padding: 18px;
+    }
+
+    .script details {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfa;
+      padding: 14px;
+    }
+
+    .script summary {
+      cursor: pointer;
+      font-weight: 850;
+      color: var(--ink);
+    }
+
+    .script h2 {
+      margin: 0 0 10px;
+      font-size: 24px;
+      letter-spacing: 0;
+    }
+
+    .script ol {
+      margin: 12px 0 0;
+      padding-left: 20px;
+      color: var(--muted);
+    }
+
+    .script li + li {
+      margin-top: 8px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 30;
+      max-width: min(420px, calc(100% - 36px));
+      border: 1px solid rgba(15, 124, 89, 0.35);
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      box-shadow: var(--shadow);
+      padding: 13px 14px;
+      font-size: 14px;
+      font-weight: 750;
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    .toast.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .empty {
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.65);
+      padding: 20px;
+      color: var(--muted);
+      text-align: center;
+      font-weight: 700;
+    }
+
+    #print-report {
+      display: none;
+    }
+
+    @media (max-width: 980px) {
+      .hero { grid-template-columns: 1fr; }
+      .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .cards { grid-template-columns: 1fr; }
+      .toolbar { grid-template-columns: 1fr; }
+      .topbar-inner { align-items: flex-start; flex-direction: column; padding: 12px 0; }
+      .top-actions { justify-content: flex-start; }
+    }
+
+    @media (max-width: 560px) {
+      .page { width: min(100% - 20px, 1180px); padding-top: 16px; }
+      .intro,
+      .setup-panel,
+      .script { padding: 16px; }
+      .summary { grid-template-columns: 1fr; }
+      .status-actions { grid-template-columns: 1fr; }
+      h1 { font-size: 34px; }
+      .metric { min-height: 78px; }
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+
+      .topbar,
+      .page {
+        display: none !important;
+      }
+
+      #print-report {
+        display: block;
+        padding: 24px;
+        color: #111827;
+        font-family: Arial, sans-serif;
+      }
+
+      #print-report h1 {
+        font-size: 26px;
+        line-height: 1.2;
+        margin: 0 0 8px;
+      }
+
+      #print-report h2 {
+        break-after: avoid;
+        font-size: 18px;
+        margin: 22px 0 8px;
+      }
+
+      #print-report table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 11px;
+      }
+
+      #print-report th,
+      #print-report td {
+        border: 1px solid #d1d5db;
+        padding: 6px;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      #print-report th {
+        background: #f3f4f6;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="mark" aria-hidden="true">WQ</div>
+        <div class="brand-text">
+          <span class="brand-title" id="topToolName">WAQueen QA Checklist</span>
+          <span class="brand-subtitle">Daily testing checklist</span>
+        </div>
+      </div>
+      <div class="top-actions" aria-label="Report actions">
+        <button class="btn btn-blue" type="button" id="copyReportBtn">Copy report</button>
+        <button class="btn btn-primary" type="button" id="pdfBtn">Download PDF</button>
+        <button class="btn btn-red" type="button" id="resetBtn">Reset</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="hero" aria-labelledby="pageTitle">
+      <div class="panel intro">
+        <p class="eyebrow">QA testing URL</p>
+        <h1 id="pageTitle">WAQueen daily QA checklist</h1>
+        <p class="lead">
+          Tester har card open kare, steps follow kare, expected result compare kare, phir Pass, Fail, ya Skip choose kare.
+          Fail ka matlab expected result match nahi hua. Skip ka matlab feature available nahi ya test data missing.
+        </p>
+        <div class="notice" role="note">
+          <strong>Security rule:</strong>
+          Public QA page mein passwords, API keys, license keys, webhook secrets, ya real customer data nahi rakhna.
+          Test credentials private channel par share karni hain. Har Fail ke sath screenshot ya Loom clip required hai.
+        </div>
+      </div>
+
+      <aside class="panel setup-panel" aria-label="Checklist setup">
+        <div class="field-grid">
+          <label>
+            Tool name
+            <input id="toolNameInput" value="WAQueen" autocomplete="off">
+          </label>
+          <label>
+            Tester name
+            <input id="testerNameInput" placeholder="Tester ka naam" autocomplete="name">
+          </label>
+          <label>
+            App base URL
+            <input id="baseUrlInput" value="https://your-waqueen-domain.com" inputmode="url" autocomplete="url">
+          </label>
+        </div>
+      </aside>
+    </section>
+
+    <section class="summary" aria-label="Progress summary">
+      <div class="metric">
+        <div class="metric-label">Total tests</div>
+        <div class="metric-value" id="totalCount">0</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Passed</div>
+        <div class="metric-value" id="passedCount">0</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Failed</div>
+        <div class="metric-value" id="failedCount">0</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Skipped</div>
+        <div class="metric-value" id="skippedCount">0</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Progress</div>
+        <div class="metric-value" id="progressPercent">0%</div>
+      </div>
+    </section>
+
+    <section class="progress-wrap" aria-label="Progress bar">
+      <div class="progress-top">
+        <span id="progressLabel">0 of 0 tests marked</span>
+        <span id="lastSavedLabel">Not saved yet</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+    </section>
+
+    <section class="toolbar" aria-label="Filters">
+      <div class="search-wrap">
+        <label class="sr-only" for="searchInput">Search tests</label>
+        <input id="searchInput" placeholder="Search by title, section, path, or expected result">
+      </div>
+      <button class="btn" type="button" id="showAllBtn">Show all sections</button>
+    </section>
+
+    <nav class="section-nav" id="sectionNav" aria-label="QA sections"></nav>
+    <div id="sections"></div>
+
+    <section class="panel script" aria-labelledby="loomTitle">
+      <h2 id="loomTitle">Loom Urdu video script</h2>
+      <details open>
+        <summary>Simple 5th-grade style explanation</summary>
+        <ol>
+          <li>Assalamualaikum, yeh WAQueen QA checklist page hai. Iska kaam daily testing ko simple banana hai.</li>
+          <li>Sab se pehle tester apna naam aur app ka staging URL likhega. Is page par koi password, API key, ya license key nahi likhni.</li>
+          <li>Upar progress summary hai: total tests, pass, fail, skip, aur percentage. Jaise school test mein marks count hotay hain, yahan QA progress count hoti hai.</li>
+          <li>Har feature ka apna card hai. Card mein title, link, steps, aur expected result diya hua hai.</li>
+          <li>Tester link open karega, steps follow karega, phir result choose karega. Agar sab sahi ho to Pass. Agar expected result match na ho to Fail. Agar feature available nahi ya data missing ho to Skip.</li>
+          <li>Fail par screenshot ya short video lazmi hai. Notes field mein bug ka clear reason likhna hai.</li>
+          <li>Page refresh ke baad progress lose nahi hoti, kyun ke browser localStorage mein save hoti hai.</li>
+          <li>End par Copy report button se summary clipboard mein aa jati hai. Download PDF button browser print dialog open karta hai, wahan Save as PDF choose karna hai.</li>
+          <li>Final testing mein Login, Dashboard, WhatsApp connection, Customers, Inbox, Campaigns, AI, Knowledge Base, Billing, API, Webhooks, Mobile, aur Support sab cover honay chahiye.</li>
+        </ol>
+      </details>
+    </section>
+  </main>
+
+  <section id="print-report" aria-hidden="true"></section>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const STORAGE_KEY = "waqueen-qa-checklist-v1";
+
+    const sections = [
+      {
+        name: "Login / Signup",
+        tests: [
+          {
+            id: "auth-signup",
+            title: "New user signup starts correctly",
+            path: "/sign-up",
+            steps: [
+              "Open signup page in a fresh browser profile.",
+              "Use private test credentials only.",
+              "Complete Clerk signup and submit."
+            ],
+            expected: "User account is created or clear verification step appears. No broken page, loop, or exposed secret appears."
+          },
+          {
+            id: "auth-signin",
+            title: "Existing user can sign in",
+            path: "/sign-in",
+            steps: [
+              "Open signin page.",
+              "Login with the private QA account.",
+              "Wait for redirect after successful login."
+            ],
+            expected: "User lands on dashboard or onboarding based on workspace state."
+          },
+          {
+            id: "auth-onboarding-redirect",
+            title: "New account goes to onboarding",
+            path: "/onboarding/business",
+            steps: [
+              "Use an account with no completed business profile.",
+              "Login and observe redirect.",
+              "Open onboarding route directly."
+            ],
+            expected: "Business setup page opens and asks for business details before dashboard access."
+          },
+          {
+            id: "auth-private-route",
+            title: "Dashboard blocks logged-out visitors",
+            path: "/dashboard",
+            steps: [
+              "Logout or open incognito.",
+              "Open dashboard URL directly.",
+              "Watch redirect behavior."
+            ],
+            expected: "Logged-out visitor is sent to sign-in. Dashboard data is not visible."
+          },
+          {
+            id: "auth-role-permissions",
+            title: "Admin-only pages are protected",
+            path: "/dashboard/api-keys",
+            steps: [
+              "Login with a non-admin QA account if available.",
+              "Open API Keys and Test Center routes.",
+              "Compare with owner/admin account."
+            ],
+            expected: "Only owner/admin can manage API keys and advanced Test Center actions."
+          }
+        ]
+      },
+      {
+        name: "Dashboard",
+        tests: [
+          {
+            id: "dash-overview",
+            title: "Dashboard overview loads live cards",
+            path: "/dashboard",
+            steps: [
+              "Open dashboard after login.",
+              "Wait until sessions, health, contacts, leads, AI, and queue stats finish loading.",
+              "Click Refresh."
+            ],
+            expected: "No crash. Stats show data, empty state, or useful error. Refresh updates without duplicate cards."
+          },
+          {
+            id: "dash-navigation",
+            title: "Sidebar module navigation works",
+            path: "/dashboard",
+            steps: [
+              "Open main rail/sidebar.",
+              "Click Inbox, AI Agent, Knowledge, Reports, Outbound, Contacts, Settings.",
+              "Use browser back."
+            ],
+            expected: "Each module opens the correct page and active state follows the route."
+          },
+          {
+            id: "dash-command-search",
+            title: "Command palette opens pages",
+            path: "/dashboard",
+            steps: [
+              "Press Ctrl+K or slash key.",
+              "Search for Inbox, Campaigns, Billing, API Docs.",
+              "Select a result."
+            ],
+            expected: "Command palette opens, filters correctly, and routes to the selected screen."
+          },
+          {
+            id: "dash-get-started",
+            title: "Get Started checklist reflects setup",
+            path: "/dashboard/get-started",
+            steps: [
+              "Open Get Started page.",
+              "Review business, WhatsApp, knowledge, AI configure, AI test, deploy steps.",
+              "Click next required action."
+            ],
+            expected: "Checklist shows done, needs action, locked, or unavailable correctly based on workspace state."
+          },
+          {
+            id: "dash-test-center",
+            title: "Test Center health and suites run",
+            path: "/dashboard/test",
+            steps: [
+              "Open Test Center as owner/admin.",
+              "Run Health.",
+              "Run one dry-run suite, then All if safe."
+            ],
+            expected: "Health score, checks, evidence, and dry-run results show without sending real messages unless explicitly confirmed."
+          },
+          {
+            id: "dash-billing-banner",
+            title: "Billing banner and lock state are clear",
+            path: "/dashboard/billing",
+            steps: [
+              "Open dashboard with active, trial, or expired test workspace.",
+              "Review top billing banner.",
+              "Try opening a locked feature if workspace is expired."
+            ],
+            expected: "Active users can work. Expired or past-due workspaces see a clear billing lock with path to Billing."
+          }
+        ]
+      },
+      {
+        name: "Main Feature Create",
+        tests: [
+          {
+            id: "create-workspace",
+            title: "Create business workspace",
+            path: "/onboarding/business?mode=new",
+            steps: [
+              "Open create workspace flow.",
+              "Fill basics, knowledge, policies, behavior, safety, and review.",
+              "Submit with private QA data."
+            ],
+            expected: "Workspace is created, setup draft is saved safely, and user can continue to dashboard."
+          },
+          {
+            id: "create-whatsapp-session",
+            title: "Create WhatsApp connection",
+            path: "/dashboard/sessions",
+            steps: [
+              "Click quick create or create session.",
+              "Add name, webhook URL if needed, DM policy, allowlist, and settings.",
+              "Start QR pairing."
+            ],
+            expected: "New session appears, QR pairing starts, permissions and session limit are respected."
+          },
+          {
+            id: "create-public-pairing-link",
+            title: "Create public pairing link",
+            path: "/dashboard/sessions",
+            steps: [
+              "Open a session card.",
+              "Create public pairing link.",
+              "Copy the link and open it in incognito."
+            ],
+            expected: "Public link opens without dashboard login, shows QR/phone code options, and does not expose API keys."
+          },
+          {
+            id: "create-contact",
+            title: "Create customer contact",
+            path: "/dashboard/contacts",
+            steps: [
+              "Open Customers.",
+              "Create a customer with name, phone, tags, notes, and WhatsApp fields.",
+              "Save."
+            ],
+            expected: "Customer appears in directory, searchable by name, phone, tag, or note."
+          },
+          {
+            id: "create-import-contacts",
+            title: "Import contacts from file",
+            path: "/dashboard/contacts",
+            steps: [
+              "Open Import contacts.",
+              "Upload safe QA CSV/XLSX file.",
+              "Review import result."
+            ],
+            expected: "Valid rows import, invalid rows are reported, duplicates and enrichment warnings are clear."
+          },
+          {
+            id: "create-tags-segments",
+            title: "Create tag and customer segment",
+            path: "/dashboard/segments",
+            steps: [
+              "Create a tag.",
+              "Create dynamic segment using a quick preset.",
+              "Preview members."
+            ],
+            expected: "Tag and segment save, preview count updates, blocked/opted-out excludes are respected."
+          },
+          {
+            id: "create-campaign",
+            title: "Create campaign template and draft",
+            path: "/dashboard/campaigns",
+            steps: [
+              "Create a template.",
+              "Create campaign with audience, session, message, variables, and optional media.",
+              "Preview audience before saving."
+            ],
+            expected: "Draft campaign saves. Preview shows eligible/skipped users and safety checks before launch."
+          },
+          {
+            id: "create-direct-message",
+            title: "Send direct WhatsApp message",
+            path: "/dashboard/send",
+            steps: [
+              "Select a send-ready session.",
+              "Choose text, media, poll, quick replies, contact card, or location.",
+              "Send only to a QA number."
+            ],
+            expected: "Message is accepted into queue or fails with a clear validation/provider error. No accidental real customer send."
+          },
+          {
+            id: "create-knowledge",
+            title: "Add AI knowledge",
+            path: "/dashboard/knowledge",
+            steps: [
+              "Add service/product, FAQ, policy, website source, file, or manual source.",
+              "Publish governed items when required.",
+              "Run knowledge search."
+            ],
+            expected: "Knowledge is stored, approved/published state is clear, and search returns matching source evidence."
+          },
+          {
+            id: "create-flow-menu",
+            title: "Create AI flow or chat menu",
+            path: "/dashboard/flows",
+            steps: [
+              "Create flow from lead qualification or support template.",
+              "Create chat menu with options.",
+              "Validate and publish only if safe."
+            ],
+            expected: "Flow/menu validates node limits and option limits. Draft/published state is visible."
+          }
+        ]
+      },
+      {
+        name: "Main Feature Edit",
+        tests: [
+          {
+            id: "edit-business-profile",
+            title: "Edit business profile",
+            path: "/dashboard/settings/business?focus=profile",
+            steps: [
+              "Open Business Profile.",
+              "Edit name, category, country, city, timezone, phone, website, and description.",
+              "Save and refresh."
+            ],
+            expected: "Changes persist after refresh and setup readiness updates."
+          },
+          {
+            id: "edit-session-settings",
+            title: "Edit WhatsApp session settings",
+            path: "/dashboard/sessions",
+            steps: [
+              "Open session settings.",
+              "Change message delay, webhook toggles, DM policy, and allowlist.",
+              "Save and refresh."
+            ],
+            expected: "Settings persist and invalid values show field-level errors."
+          },
+          {
+            id: "edit-contact-lead",
+            title: "Edit customer and lead details",
+            path: "/dashboard/contacts",
+            steps: [
+              "Open a customer drawer.",
+              "Edit profile tab and lead workflow details.",
+              "Save follow-up date and owner note."
+            ],
+            expected: "Customer, lead stage, missing details, tags, and follow-up information update correctly."
+          },
+          {
+            id: "edit-inbox-conversation",
+            title: "Edit inbox conversation details",
+            path: "/dashboard/inbox",
+            steps: [
+              "Open a conversation.",
+              "Edit display name, tags, lead fields, and reply target if available.",
+              "Send a QA reply if safe."
+            ],
+            expected: "Thread details update and replies appear in the conversation and queue."
+          },
+          {
+            id: "edit-campaign-draft",
+            title: "Edit campaign draft before launch",
+            path: "/dashboard/campaigns",
+            steps: [
+              "Open a draft campaign.",
+              "Change audience, template, message, schedule, or media.",
+              "Preview again."
+            ],
+            expected: "Preview recalculates eligible recipients and launch remains blocked if safety check fails."
+          },
+          {
+            id: "edit-ai-config",
+            title: "Edit AI configure, safety, and voice",
+            path: "/dashboard/ai-agent?tab=configure",
+            steps: [
+              "Change AI mode, language, response length, source toggles, media settings, and safety limits.",
+              "Save settings.",
+              "Run AI Test Chat."
+            ],
+            expected: "Settings persist. Live Auto Reply is blocked until readiness requirements are satisfied."
+          },
+          {
+            id: "edit-group-policy",
+            title: "Edit group automation policy",
+            path: "/dashboard/groups",
+            steps: [
+              "Open Group Chats.",
+              "Select a group.",
+              "Change AI off, mention only, auto reply, and allowed participants."
+            ],
+            expected: "Policy saves only for manageable groups and unknown participants are blocked when allowlist is enabled."
+          }
+        ]
+      },
+      {
+        name: "Main Feature Delete",
+        tests: [
+          {
+            id: "delete-session",
+            title: "Delete or logout WhatsApp session",
+            path: "/dashboard/sessions",
+            steps: [
+              "Use a dummy QA session only.",
+              "Test logout and delete confirmation.",
+              "Cancel first, then confirm if safe."
+            ],
+            expected: "Destructive confirmation appears. Confirmed action removes/logs out session and clears related session data safely."
+          },
+          {
+            id: "delete-contact-state",
+            title: "Block, opt out, or delete customer data",
+            path: "/dashboard/contacts",
+            steps: [
+              "Open a QA customer.",
+              "Test block, opt-out, and delete/archive actions if available.",
+              "Refresh directory and campaign preview."
+            ],
+            expected: "Blocked/opted-out contacts are excluded from campaigns and automations. Destructive action asks confirmation."
+          },
+          {
+            id: "delete-campaign",
+            title: "Cancel or archive campaign",
+            path: "/dashboard/campaigns",
+            steps: [
+              "Use draft or QA campaign.",
+              "Try delete/archive/cancel action.",
+              "Refresh campaign list."
+            ],
+            expected: "Draft can be removed or archived if allowed. Live/queued campaigns only allow safe cancel/pause behavior."
+          },
+          {
+            id: "delete-queue",
+            title: "Cancel, retry, or clear delivery queue",
+            path: "/dashboard/queue",
+            steps: [
+              "Open Delivery Queue.",
+              "Filter queued, failed, and cancelled messages.",
+              "Try cancel, retry, and clear with confirmation on QA data."
+            ],
+            expected: "Only permitted actions run. Summary counts update and no unrelated messages are affected."
+          },
+          {
+            id: "delete-api-key",
+            title: "Revoke API key",
+            path: "/dashboard/api-keys",
+            steps: [
+              "Create or select a test key.",
+              "Click revoke.",
+              "Confirm and try using key in Playground."
+            ],
+            expected: "Revoked key no longer works. List shows revoked status when filter is changed."
+          }
+        ]
+      },
+      {
+        name: "Public / User Page",
+        tests: [
+          {
+            id: "public-landing",
+            title: "Landing page loads and CTAs work",
+            path: "/",
+            steps: [
+              "Open public homepage.",
+              "Click feature, pricing, docs, and trial CTAs.",
+              "Check desktop and mobile layout."
+            ],
+            expected: "WAQueen content, screenshots, pricing, and CTAs load without broken images or copied placeholder text."
+          },
+          {
+            id: "public-pricing",
+            title: "Public pricing page",
+            path: "/pricing",
+            steps: [
+              "Open pricing page.",
+              "Check trial, Basic, and Pro plan copy.",
+              "Click paid plan buttons without completing real payment."
+            ],
+            expected: "Pricing is clear and paid buttons start checkout flow or show controlled unavailable state."
+          },
+          {
+            id: "public-docs",
+            title: "Public API docs page",
+            path: "/docs/api",
+            steps: [
+              "Open public API docs.",
+              "Check endpoint list, code samples, OpenAPI, and Postman links.",
+              "Copy sample code if shown."
+            ],
+            expected: "Docs are readable without login and no secret key is hardcoded."
+          },
+          {
+            id: "public-pairing",
+            title: "Public pairing link page",
+            path: "/connect/{private-pairing-token}",
+            steps: [
+              "Generate a pairing link from dashboard.",
+              "Open link in incognito.",
+              "Test QR refresh and phone-code mode."
+            ],
+            expected: "Short-lived token opens secure pairing only. Expired/used links show safe unavailable state."
+          },
+          {
+            id: "public-legal",
+            title: "Terms and privacy pages",
+            path: "/privacy",
+            steps: [
+              "Open Privacy and Terms pages.",
+              "Check mobile readability.",
+              "Confirm placeholder text is acceptable for staging."
+            ],
+            expected: "Legal pages load, are not indexed with sensitive staging data, and do not expose internal credentials."
+          }
+        ]
+      },
+      {
+        name: "Emails / Notifications",
+        tests: [
+          {
+            id: "notify-action-toasts",
+            title: "Action success and error notifications",
+            path: "/dashboard",
+            steps: [
+              "Create, save, update, and intentionally submit invalid forms.",
+              "Watch toast or inline messages.",
+              "Refresh after success."
+            ],
+            expected: "Every action gives clear success, warning, or error feedback and does not leave spinner stuck."
+          },
+          {
+            id: "notify-webhook-delivery",
+            title: "Webhook delivery notifications",
+            path: "/dashboard/webhooks",
+            steps: [
+              "Save QA webhook endpoint.",
+              "Send test webhook.",
+              "Review delivery status, failure reason, and replay."
+            ],
+            expected: "Webhook test is queued, delivery log updates, failed deliveries can be replayed by authorized users."
+          },
+          {
+            id: "notify-inbox-activity",
+            title: "Inbox calls, statuses, and unread activity",
+            path: "/dashboard/inbox",
+            steps: [
+              "Send inbound QA message, status, or call event if test phone is connected.",
+              "Open Inbox activity tabs.",
+              "Refresh."
+            ],
+            expected: "Unread count, call log, status updates, and synced contacts appear in the correct tab."
+          },
+          {
+            id: "notify-billing-email",
+            title: "Billing and license emails",
+            path: "/dashboard/billing",
+            steps: [
+              "Use staging email inbox or Mailtrap only.",
+              "Trigger license redeem, checkout success, expired, or trial warning if staging supports it.",
+              "Check email copy."
+            ],
+            expected: "Emails are sent to QA inbox, contain no raw secrets, and match billing state."
+          }
+        ]
+      },
+      {
+        name: "Payment / License",
+        tests: [
+          {
+            id: "billing-status",
+            title: "Billing status loads",
+            path: "/dashboard/billing",
+            steps: [
+              "Open Billing page.",
+              "Check current plan, status, trial/paid-through date, and limits.",
+              "Refresh."
+            ],
+            expected: "Billing status matches workspace record and does not show wrong plan."
+          },
+          {
+            id: "billing-checkout",
+            title: "Monthly checkout start",
+            path: "/checkout/monthly?plan=starter",
+            steps: [
+              "Click Basic/Starter checkout from Pricing or Billing.",
+              "Do not use real card unless approved.",
+              "Observe redirect or unavailable message."
+            ],
+            expected: "Authenticated user starts secure Shopify checkout. Missing config shows controlled error."
+          },
+          {
+            id: "billing-license-redeem",
+            title: "Redeem license key",
+            path: "/dashboard/billing",
+            steps: [
+              "Paste private staging license key.",
+              "Click redeem.",
+              "Refresh Billing and Dashboard."
+            ],
+            expected: "Valid license activates plan. Invalid, expired, revoked, or reused license shows clear error."
+          },
+          {
+            id: "billing-expiry-lock",
+            title: "Expired trial or past-due lock",
+            path: "/dashboard",
+            steps: [
+              "Use workspace with expired/past-due billing state.",
+              "Open send, campaigns, AI, and knowledge update pages.",
+              "Open Billing."
+            ],
+            expected: "Paid features are locked and Billing remains accessible for recovery."
+          },
+          {
+            id: "billing-shopify-webhooks",
+            title: "Shopify webhook sync",
+            path: "/dashboard/billing",
+            steps: [
+              "Ask backend/admin to trigger staging Shopify order/refund webhook.",
+              "Refresh billing status.",
+              "Check webhook logs if available."
+            ],
+            expected: "Paid/refund events update subscription/license state exactly once without duplicate activation."
+          }
+        ]
+      },
+      {
+        name: "Integrations",
+        tests: [
+          {
+            id: "integration-api-key-create",
+            title: "Create scoped API key",
+            path: "/dashboard/api-keys",
+            steps: [
+              "Open API Keys as admin.",
+              "Create Test key with limited scope and rate limit.",
+              "Copy secret once."
+            ],
+            expected: "Full key is shown once only. Prefix, scopes, expiry, environment, and rate limit are visible."
+          },
+          {
+            id: "integration-api-key-rotate",
+            title: "Rotate API key",
+            path: "/dashboard/api-keys",
+            steps: [
+              "Select a test key.",
+              "Rotate with confirmation.",
+              "Copy new key and try old key."
+            ],
+            expected: "New secret works, old secret fails, and audit/list state updates."
+          },
+          {
+            id: "integration-playground-check",
+            title: "API Playground check number",
+            path: "/dashboard/playground",
+            steps: [
+              "Paste private test API key.",
+              "Choose WhatsApp check-number sample.",
+              "Run with a QA phone number."
+            ],
+            expected: "Response area shows status, headers, and JSON body. Invalid scope/key returns controlled error."
+          },
+          {
+            id: "integration-playground-send",
+            title: "API Playground send message",
+            path: "/dashboard/playground",
+            steps: [
+              "Choose send-message sample.",
+              "Edit recipient to QA number and confirm real send.",
+              "Check Delivery Queue."
+            ],
+            expected: "Message queues once with idempotency key and appears in queue/report."
+          },
+          {
+            id: "integration-openapi-postman",
+            title: "OpenAPI and Postman exports",
+            path: "/api/openapi.json",
+            steps: [
+              "Open OpenAPI JSON.",
+              "Open /api/postman.",
+              "Import collection into Postman if needed."
+            ],
+            expected: "Schemas are valid JSON and endpoints match dashboard docs."
+          },
+          {
+            id: "integration-webhooks",
+            title: "Webhook save, test, replay",
+            path: "/dashboard/webhooks",
+            steps: [
+              "Save QA endpoint on a session.",
+              "Send webhook test.",
+              "Filter deliveries by status and replay failed test."
+            ],
+            expected: "Webhook URL validation works, delivery statuses are searchable, and replay requires permission."
+          }
+        ]
+      },
+      {
+        name: "Settings / Branding",
+        tests: [
+          {
+            id: "settings-business-brand",
+            title: "Business identity and branding data",
+            path: "/dashboard/settings/business",
+            steps: [
+              "Update business name, slug, category, city, website, and phone.",
+              "Open dashboard, public pairing link, AI tests, and docs where business name appears.",
+              "Refresh."
+            ],
+            expected: "Business identity is consistent and no stale old name appears after save."
+          },
+          {
+            id: "settings-ai-brand-voice",
+            title: "AI owner voice and tone settings",
+            path: "/dashboard/ai-agent?tab=configure",
+            steps: [
+              "Set language mode, tone, words to use/avoid, and owner voice samples.",
+              "Save.",
+              "Run AI Test Chat in English and Roman Urdu."
+            ],
+            expected: "AI follows selected language/tone and does not use blocked words or unsupported claims."
+          },
+          {
+            id: "settings-domain",
+            title: "Custom domain or public app URL",
+            path: "/dashboard/settings/business",
+            steps: [
+              "Check if staging build has custom domain management.",
+              "If not available, mark Skip with note.",
+              "If available, verify domain validation, SSL, and redirect."
+            ],
+            expected: "No custom-domain feature is visible in the current WAQueen dashboard unless a newer build adds it."
+          },
+          {
+            id: "settings-security-headers",
+            title: "Security headers and public metadata",
+            path: "/",
+            steps: [
+              "Open browser devtools network tab.",
+              "Check public pages and dashboard response headers.",
+              "Review favicon/logo/title."
+            ],
+            expected: "CSP, X-Frame-Options, referrer policy, and public metadata are present. No staging secret is visible."
+          }
+        ]
+      },
+      {
+        name: "Mobile Test",
+        tests: [
+          {
+            id: "mobile-landing",
+            title: "Mobile landing and pricing",
+            path: "/",
+            steps: [
+              "Open mobile viewport 375px wide.",
+              "Scroll homepage and pricing.",
+              "Tap nav and CTA buttons."
+            ],
+            expected: "No horizontal scroll, text overlap, broken images, or tiny tap targets."
+          },
+          {
+            id: "mobile-dashboard-shell",
+            title: "Mobile dashboard navigation",
+            path: "/dashboard",
+            steps: [
+              "Open dashboard on mobile.",
+              "Use menu button and module navigation.",
+              "Open command search if available."
+            ],
+            expected: "Navigation is usable, close buttons work, and content is not hidden behind fixed UI."
+          },
+          {
+            id: "mobile-inbox",
+            title: "Mobile inbox and composer",
+            path: "/dashboard/inbox",
+            steps: [
+              "Open Inbox on mobile.",
+              "Select conversation.",
+              "Use text, media, poll, contact, and location composer controls."
+            ],
+            expected: "Thread, detail drawer, keyboard, and composer fit without overlap."
+          },
+          {
+            id: "mobile-send-campaign",
+            title: "Mobile send and campaign builder",
+            path: "/dashboard/send",
+            steps: [
+              "Open Send and Campaigns on mobile.",
+              "Fill long message and media fields.",
+              "Preview campaign."
+            ],
+            expected: "Forms remain readable, validation is visible, and buttons stay tappable."
+          },
+          {
+            id: "mobile-public-pairing",
+            title: "Mobile public pairing link",
+            path: "/connect/{private-pairing-token}",
+            steps: [
+              "Open public pairing link on mobile.",
+              "Switch QR and phone-code tabs.",
+              "Copy pairing code."
+            ],
+            expected: "QR/code content fits screen and copy feedback is clear."
+          }
+        ]
+      },
+      {
+        name: "Support / Contact",
+        tests: [
+          {
+            id: "support-chat-widget",
+            title: "WAQueen support chat",
+            path: "/dashboard",
+            steps: [
+              "Open dashboard support chat.",
+              "Ask how to connect WhatsApp, send a campaign, and use Test Center.",
+              "Click suggested page links."
+            ],
+            expected: "Support chat answers with WAQueen-specific help and routes to correct dashboard pages."
+          },
+          {
+            id: "support-request-form",
+            title: "Support request categories",
+            path: "/dashboard",
+            steps: [
+              "Open support/contact form if available.",
+              "Submit QA bug, billing, technical, and feature categories using safe test text.",
+              "Check response."
+            ],
+            expected: "Support request is accepted or clear unavailable message appears. No private key is required in form."
+          },
+          {
+            id: "support-doc-links",
+            title: "Docs and quickstart links",
+            path: "/dashboard/docs",
+            steps: [
+              "Open dashboard docs and public API docs.",
+              "Click quickstart, examples, OpenAPI, Postman, and support links.",
+              "Return to dashboard."
+            ],
+            expected: "All help links work and no 404 or stale product name appears."
+          }
+        ]
+      }
+    ];
+
+    const flatTests = sections.flatMap((section) =>
+      section.tests.map((test) => ({ ...test, section: section.name }))
+    );
+
+    const elements = {
+      toolNameInput: document.getElementById("toolNameInput"),
+      testerNameInput: document.getElementById("testerNameInput"),
+      baseUrlInput: document.getElementById("baseUrlInput"),
+      topToolName: document.getElementById("topToolName"),
+      totalCount: document.getElementById("totalCount"),
+      passedCount: document.getElementById("passedCount"),
+      failedCount: document.getElementById("failedCount"),
+      skippedCount: document.getElementById("skippedCount"),
+      progressPercent: document.getElementById("progressPercent"),
+      progressLabel: document.getElementById("progressLabel"),
+      progressBar: document.getElementById("progressBar"),
+      lastSavedLabel: document.getElementById("lastSavedLabel"),
+      sectionNav: document.getElementById("sectionNav"),
+      sections: document.getElementById("sections"),
+      searchInput: document.getElementById("searchInput"),
+      showAllBtn: document.getElementById("showAllBtn"),
+      copyReportBtn: document.getElementById("copyReportBtn"),
+      pdfBtn: document.getElementById("pdfBtn"),
+      resetBtn: document.getElementById("resetBtn"),
+      toast: document.getElementById("toast"),
+      printReport: document.getElementById("print-report")
+    };
+
+    let activeSection = "All";
+    let state = loadState();
+
+    init();
+
+    function init() {
+      elements.toolNameInput.value = state.toolName || "WAQueen";
+      elements.testerNameInput.value = state.testerName || "";
+      elements.baseUrlInput.value = state.baseUrl || "https://your-waqueen-domain.com";
+      elements.topToolName.textContent = `${elements.toolNameInput.value || "WAQueen"} QA Checklist`;
+
+      [elements.toolNameInput, elements.testerNameInput, elements.baseUrlInput].forEach((input) => {
+        input.addEventListener("input", () => {
+          state.toolName = elements.toolNameInput.value.trim() || "WAQueen";
+          state.testerName = elements.testerNameInput.value.trim();
+          state.baseUrl = elements.baseUrlInput.value.trim();
+          elements.topToolName.textContent = `${state.toolName} QA Checklist`;
+          saveState();
+          render();
+        });
+      });
+
+      elements.searchInput.addEventListener("input", render);
+      elements.showAllBtn.addEventListener("click", () => {
+        activeSection = "All";
+        elements.searchInput.value = "";
+        render();
+      });
+      elements.copyReportBtn.addEventListener("click", copyReport);
+      elements.pdfBtn.addEventListener("click", printReport);
+      elements.resetBtn.addEventListener("click", resetAll);
+
+      render();
+    }
+
+    function render() {
+      renderNav();
+      renderSections();
+      renderSummary();
+    }
+
+    function renderNav() {
+      const counts = sectionCounts();
+      const navItems = ["All", ...sections.map((section) => section.name)];
+      elements.sectionNav.innerHTML = navItems.map((name) => {
+        const count = name === "All" ? flatTests.length : counts[name]?.total || 0;
+        return `
+          <button class="section-chip ${name === activeSection ? "active" : ""}" type="button" data-section="${escapeAttr(name)}">
+            ${escapeHtml(name)} (${count})
+          </button>
+        `;
+      }).join("");
+
+      elements.sectionNav.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", () => {
+          activeSection = button.dataset.section || "All";
+          render();
+        });
+      });
+    }
+
+    function renderSections() {
+      const query = elements.searchInput.value.trim().toLowerCase();
+      const visibleSections = sections
+        .filter((section) => activeSection === "All" || section.name === activeSection)
+        .map((section) => ({
+          ...section,
+          tests: section.tests.filter((test) => matchesQuery(section.name, test, query))
+        }))
+        .filter((section) => section.tests.length > 0);
+
+      if (!visibleSections.length) {
+        elements.sections.innerHTML = `<div class="empty">No tests match this search.</div>`;
+        return;
+      }
+
+      elements.sections.innerHTML = visibleSections.map((section) => {
+        const marked = section.tests.filter((test) => Boolean(testState(test.id).status)).length;
+        return `
+          <section class="section" id="${slug(section.name)}">
+            <div class="section-header">
+              <h2 class="section-title">${escapeHtml(section.name)}</h2>
+              <div class="section-meta">${marked} / ${section.tests.length} marked</div>
+            </div>
+            <div class="cards">
+              ${section.tests.map((test) => renderTestCard(section.name, test)).join("")}
+            </div>
+          </section>
+        `;
+      }).join("");
+
+      elements.sections.querySelectorAll(".status-btn").forEach((button) => {
+        button.addEventListener("click", () => {
+          const id = button.dataset.id;
+          const value = button.dataset.value;
+          if (!id || !value) return;
+          const current = testState(id);
+          current.status = current.status === value ? "" : value;
+          current.updatedAt = Date.now();
+          state.results[id] = current;
+          saveState();
+          render();
+        });
+      });
+
+      elements.sections.querySelectorAll("textarea[data-id]").forEach((textarea) => {
+        textarea.addEventListener("input", () => {
+          const id = textarea.dataset.id;
+          if (!id) return;
+          const current = testState(id);
+          current.note = textarea.value;
+          current.updatedAt = Date.now();
+          state.results[id] = current;
+          saveState({ quiet: true });
+          renderSummary();
+        });
+      });
+    }
+
+    function renderTestCard(sectionName, test) {
+      const current = testState(test.id);
+      const status = current.status || "pending";
+      const statusLabel = status === "pending" ? "Pending" : status;
+      const link = buildLink(test.path);
+      return `
+        <article class="test-card" data-status="${escapeAttr(current.status || "")}">
+          <div class="card-top">
+            <div>
+              <p class="eyebrow">${escapeHtml(sectionName)}</p>
+              <h3 class="test-title">${escapeHtml(test.title)}</h3>
+            </div>
+            <div class="status-pill ${current.status ? `status-${current.status}` : ""}">${escapeHtml(statusLabel)}</div>
+          </div>
+          <div class="link-row">
+            <span>Test link</span>
+            <a href="${escapeAttr(link)}" target="_blank" rel="noopener">${escapeHtml(test.path)}</a>
+          </div>
+          <div>
+            <p class="card-label">Steps</p>
+            <ol class="steps">
+              ${test.steps.map((step) => `<li>${escapeHtml(step)}</li>`).join("")}
+            </ol>
+          </div>
+          <div>
+            <p class="card-label">Expected result</p>
+            <p class="expected">${escapeHtml(test.expected)}</p>
+          </div>
+          <div class="status-actions" role="group" aria-label="${escapeAttr(test.title)} result">
+            ${["pass", "fail", "skip"].map((value) => `
+              <button
+                class="status-btn"
+                type="button"
+                data-id="${escapeAttr(test.id)}"
+                data-value="${value}"
+                aria-pressed="${current.status === value ? "true" : "false"}"
+              >
+                ${value === "pass" ? "Pass" : value === "fail" ? "Fail" : "Skip"}
+              </button>
+            `).join("")}
+          </div>
+          <div class="fail-help">Fail selected: screenshot ya Loom clip attach karna lazmi hai, aur notes mein exact bug likhna hai.</div>
+          <label>
+            Notes optional
+            <textarea data-id="${escapeAttr(test.id)}" placeholder="Bug detail, screenshot link, Loom link, test data issue, ya skip reason">${escapeHtml(current.note || "")}</textarea>
+          </label>
+        </article>
+      `;
+    }
+
+    function renderSummary() {
+      const totals = calculateTotals();
+      elements.totalCount.textContent = String(totals.total);
+      elements.passedCount.textContent = String(totals.pass);
+      elements.failedCount.textContent = String(totals.fail);
+      elements.skippedCount.textContent = String(totals.skip);
+      elements.progressPercent.textContent = `${totals.percent}%`;
+      elements.progressLabel.textContent = `${totals.marked} of ${totals.total} tests marked`;
+      elements.progressBar.style.width = `${totals.percent}%`;
+      elements.lastSavedLabel.textContent = state.lastSavedAt ? `Saved ${new Date(state.lastSavedAt).toLocaleString()}` : "Not saved yet";
+    }
+
+    function calculateTotals() {
+      const total = flatTests.length;
+      const pass = flatTests.filter((test) => testState(test.id).status === "pass").length;
+      const fail = flatTests.filter((test) => testState(test.id).status === "fail").length;
+      const skip = flatTests.filter((test) => testState(test.id).status === "skip").length;
+      const marked = pass + fail + skip;
+      const percent = total ? Math.round((marked / total) * 100) : 0;
+      return { total, pass, fail, skip, marked, percent };
+    }
+
+    function sectionCounts() {
+      return sections.reduce((acc, section) => {
+        acc[section.name] = {
+          total: section.tests.length,
+          marked: section.tests.filter((test) => Boolean(testState(test.id).status)).length
+        };
+        return acc;
+      }, {});
+    }
+
+    function matchesQuery(sectionName, test, query) {
+      if (!query) return true;
+      const haystack = [
+        sectionName,
+        test.title,
+        test.path,
+        test.expected,
+        test.steps.join(" ")
+      ].join(" ").toLowerCase();
+      return haystack.includes(query);
+    }
+
+    function testState(id) {
+      if (!state.results[id]) {
+        state.results[id] = { status: "", note: "", updatedAt: 0 };
+      }
+      return state.results[id];
+    }
+
+    function buildLink(path) {
+      const base = (state.baseUrl || elements.baseUrlInput.value || "").trim().replace(/\/+$/, "");
+      if (!base) return path;
+      if (/^https?:\/\//i.test(path)) return path;
+      return `${base}${path.startsWith("/") ? path : `/${path}`}`;
+    }
+
+    function copyReport() {
+      const report = buildReportText();
+      navigator.clipboard.writeText(report)
+        .then(() => showToast("QA report copied to clipboard."))
+        .catch(() => {
+          fallbackCopy(report);
+          showToast("QA report copied using fallback.");
+        });
+    }
+
+    function printReport() {
+      elements.printReport.innerHTML = buildReportHtml();
+      window.print();
+    }
+
+    function resetAll() {
+      const confirmed = window.confirm("Reset all QA progress and notes for this browser?");
+      if (!confirmed) return;
+      state.results = {};
+      state.lastSavedAt = Date.now();
+      saveState({ quiet: true });
+      render();
+      showToast("QA progress reset.");
+    }
+
+    function buildReportText() {
+      const totals = calculateTotals();
+      const date = new Date().toLocaleString();
+      const lines = [
+        `${state.toolName || "WAQueen"} QA Report`,
+        `Tester: ${state.testerName || "Not provided"}`,
+        `App URL: ${state.baseUrl || "Not provided"}`,
+        `Generated: ${date}`,
+        "",
+        `Total: ${totals.total}`,
+        `Passed: ${totals.pass}`,
+        `Failed: ${totals.fail}`,
+        `Skipped: ${totals.skip}`,
+        `Progress: ${totals.percent}%`,
+        "",
+        "Important rules:",
+        "- Public report must not include passwords, API keys, license keys, webhook secrets, or real customer data.",
+        "- Every Fail needs screenshot or Loom/video evidence.",
+        "- Skip means feature unavailable or test data missing.",
+        ""
+      ];
+
+      sections.forEach((section) => {
+        lines.push(`## ${section.name}`);
+        section.tests.forEach((test) => {
+          const current = testState(test.id);
+          const status = current.status ? current.status.toUpperCase() : "PENDING";
+          lines.push(`- [${status}] ${test.title} (${test.path})`);
+          if (current.note) lines.push(`  Notes: ${current.note}`);
+        });
+        lines.push("");
+      });
+
+      return lines.join("\n");
+    }
+
+    function buildReportHtml() {
+      const totals = calculateTotals();
+      const date = new Date().toLocaleString();
+      const rows = flatTests.map((test) => {
+        const current = testState(test.id);
+        return `
+          <tr>
+            <td>${escapeHtml(test.section)}</td>
+            <td>${escapeHtml(test.title)}</td>
+            <td>${escapeHtml((current.status || "pending").toUpperCase())}</td>
+            <td>${escapeHtml(test.path)}</td>
+            <td>${escapeHtml(current.note || "")}</td>
+          </tr>
+        `;
+      }).join("");
+
+      return `
+        <h1>${escapeHtml(state.toolName || "WAQueen")} QA Report</h1>
+        <p><strong>Tester:</strong> ${escapeHtml(state.testerName || "Not provided")}</p>
+        <p><strong>App URL:</strong> ${escapeHtml(state.baseUrl || "Not provided")}</p>
+        <p><strong>Generated:</strong> ${escapeHtml(date)}</p>
+        <p><strong>Total:</strong> ${totals.total} &nbsp; <strong>Passed:</strong> ${totals.pass} &nbsp; <strong>Failed:</strong> ${totals.fail} &nbsp; <strong>Skipped:</strong> ${totals.skip} &nbsp; <strong>Progress:</strong> ${totals.percent}%</p>
+        <p><strong>Rules:</strong> No passwords/API keys/license keys in public report. Every Fail needs screenshot or Loom/video evidence.</p>
+        <h2>Feature Results</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Section</th>
+              <th>Test</th>
+              <th>Status</th>
+              <th>Path</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    function loadState() {
+      try {
+        const raw = window.localStorage.getItem(STORAGE_KEY);
+        if (!raw) return defaultState();
+        return { ...defaultState(), ...JSON.parse(raw) };
+      } catch {
+        return defaultState();
+      }
+    }
+
+    function saveState(options = {}) {
+      state.lastSavedAt = Date.now();
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      if (!options.quiet) showToast("Progress saved in this browser.");
+    }
+
+    function defaultState() {
+      return {
+        toolName: "WAQueen",
+        testerName: "",
+        baseUrl: "https://your-waqueen-domain.com",
+        results: {},
+        lastSavedAt: 0
+      };
+    }
+
+    function fallbackCopy(text) {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.setAttribute("readonly", "");
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+    }
+
+    function showToast(message) {
+      elements.toast.textContent = message;
+      elements.toast.classList.add("visible");
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => {
+        elements.toast.classList.remove("visible");
+      }, 2200);
+    }
+
+    function slug(value) {
+      return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function escapeAttr(value) {
+      return escapeHtml(value);
+    }
+  </script>
+</body>
+</html>

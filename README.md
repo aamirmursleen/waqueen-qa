@@ -1,0 +1,22 @@
+# WAQueen QA Checklist
+
+Static QA testing page for WAQueen.
+
+## GitHub Pages
+
+1. Create a separate repository named `waqueen-qa`.
+2. Put `index.html` from this folder at the root of that repository.
+3. Enable GitHub Pages from the repository settings.
+4. Share this URL with QA:
+
+```text
+https://aamirmursleen.github.io/waqueen-qa/
+```
+
+## Rules
+
+- Do not add passwords, API keys, license keys, webhook secrets, or real customer data to the public page.
+- Share test credentials privately.
+- Fail means the expected result did not match.
+- Skip means the feature is unavailable or test data is missing.
+- Every Fail needs screenshot or Loom/video evidence.
