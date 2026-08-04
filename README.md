@@ -1,6 +1,10 @@
 # WAQueen QA Checklist
 
-Static QA testing page for WAQueen.
+Static do-or-die QA testing page for WAQueen.
+
+This public form is intentionally short: 16 critical tests designed for a
+45-60 minute manual smoke pass. Deep regression testing should use a separate
+full checklist.
 
 ## GitHub Pages
 

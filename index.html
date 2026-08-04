@@ -844,7 +844,7 @@
         <div class="mark" aria-hidden="true">WQ</div>
         <div class="brand-text">
           <span class="brand-title" id="topToolName">WAQueen QA Checklist</span>
-          <span class="brand-subtitle">Daily testing checklist</span>
+          <span class="brand-subtitle">Do-or-die testing checklist</span>
         </div>
       </div>
       <div class="top-actions" aria-label="Report actions">
@@ -858,16 +858,17 @@
   <main class="page">
     <section class="hero" aria-labelledby="pageTitle">
       <div class="panel intro">
-        <p class="eyebrow">QA testing URL</p>
-        <h1 id="pageTitle">WAQueen daily QA checklist</h1>
+        <p class="eyebrow">Critical QA testing URL</p>
+        <h1 id="pageTitle">WAQueen do-or-die QA checklist</h1>
         <p class="lead">
-          Tester har card open kare, steps follow kare, expected result compare kare, phir Pass, Fail, ya Skip choose kare.
-          Fail ka matlab expected result match nahi hua. Skip ka matlab feature available nahi ya test data missing.
+          Yeh short checklist sirf business-critical flows ke liye hai. Normal tester 45-60 minutes mein complete kar sakta hai.
+          Agar in mein se koi fail ho, product demo ya daily use block ho sakta hai.
         </p>
         <div class="notice" role="note">
           <strong>Security rule:</strong>
           Public QA page mein passwords, API keys, license keys, webhook secrets, ya real customer data nahi rakhna.
           Test credentials private channel par share karni hain. Har Fail ke sath screenshot ya Loom clip required hai.
+          Deep regression alag checklist mein ho gi; yahan sirf must-pass flows hain.
         </div>
       </div>
 
@@ -938,15 +939,15 @@
       <details open>
         <summary>Simple 5th-grade style explanation</summary>
         <ol>
-          <li>Assalamualaikum, yeh WAQueen QA checklist page hai. Iska kaam daily testing ko simple banana hai.</li>
+          <li>Assalamualaikum, yeh WAQueen do-or-die QA checklist page hai. Iska kaam sirf woh tests cover karna hai jo product ke liye must-pass hain.</li>
           <li>Sab se pehle tester apna naam aur app ka staging URL likhega. Is page par koi password, API key, ya license key nahi likhni.</li>
           <li>Upar progress summary hai: total tests, pass, fail, skip, aur percentage. Jaise school test mein marks count hotay hain, yahan QA progress count hoti hai.</li>
           <li>Har feature ka apna card hai. Card mein title, link, steps, aur expected result diya hua hai.</li>
           <li>Tester link open karega, steps follow karega, phir result choose karega. Agar sab sahi ho to Pass. Agar expected result match na ho to Fail. Agar feature available nahi ya data missing ho to Skip.</li>
           <li>Fail par screenshot ya short video lazmi hai. Notes field mein bug ka clear reason likhna hai.</li>
           <li>Page refresh ke baad progress lose nahi hoti, kyun ke browser localStorage mein save hoti hai.</li>
-          <li>End par Copy report button se summary clipboard mein aa jati hai. Download PDF button browser print dialog open karta hai, wahan Save as PDF choose karna hai.</li>
-          <li>Final testing mein Login, Dashboard, WhatsApp connection, Customers, Inbox, Campaigns, AI, Knowledge Base, Billing, API, Webhooks, Mobile, aur Support sab cover honay chahiye.</li>
+          <li>End par Copy report button se summary clipboard mein aa jati hai. Download PDF button current report ka PDF download karta hai.</li>
+          <li>Target timing 45 se 60 minutes hai. Is mein Login, Dashboard, WhatsApp connection, Send, Inbox, Customers, Campaigns, AI, Billing, API/Webhook, Public pages, aur Mobile critical path cover hotay hain.</li>
         </ol>
       </details>
     </section>
@@ -956,9 +957,9 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
-    const STORAGE_KEY = "waqueen-qa-checklist-v1";
+    const STORAGE_KEY = "waqueen-qa-critical-v2";
 
-    const sections = [
+    const archivedFullSections = [
       {
         name: "Login / Signup",
         tests: [
@@ -1736,23 +1737,238 @@
       }
     ];
 
+    const sections = [
+      {
+        name: "1. Access + Dashboard",
+        tests: [
+          {
+            id: "critical-login-dashboard",
+            title: "Login works and dashboard opens",
+            path: "/sign-in",
+            steps: [
+              "Open sign-in with private QA credentials.",
+              "Login and wait for redirect.",
+              "Open Dashboard and refresh once."
+            ],
+            expected: "User reaches dashboard, no auth loop appears, and main dashboard cards load with data, empty state, or clear error."
+          },
+          {
+            id: "critical-business-setup",
+            title: "Business setup / Get Started is not blocking valid user",
+            path: "/dashboard/get-started",
+            steps: [
+              "Open Get Started after login.",
+              "Check business profile, WhatsApp, knowledge, AI configure, and deploy steps.",
+              "Click the next required action."
+            ],
+            expected: "Completed setup does not block dashboard. Incomplete setup shows exact next action without broken links."
+          }
+        ]
+      },
+      {
+        name: "2. WhatsApp Connection",
+        tests: [
+          {
+            id: "critical-session-pairing",
+            title: "WhatsApp session can be created and paired",
+            path: "/dashboard/sessions",
+            steps: [
+              "Create or open a QA WhatsApp session.",
+              "Start QR pairing or create public pairing link.",
+              "Scan/link with QA WhatsApp number only."
+            ],
+            expected: "Session reaches connected/send-ready state, QR or phone-code flow is clear, and no API key or dashboard secret is exposed."
+          },
+          {
+            id: "critical-session-health",
+            title: "Session status, reconnect, and logout are safe",
+            path: "/dashboard/sessions",
+            steps: [
+              "Check session status and diagnostics.",
+              "Use refresh/reconnect/restart if available.",
+              "Open logout/delete confirmation but cancel unless using dummy data."
+            ],
+            expected: "Status is understandable, reconnect action does not crash, and destructive actions always ask confirmation."
+          }
+        ]
+      },
+      {
+        name: "3. Send + Queue",
+        tests: [
+          {
+            id: "critical-send-message",
+            title: "Direct WhatsApp message sends to QA number",
+            path: "/dashboard/send",
+            steps: [
+              "Select connected QA session.",
+              "Send one short text message to QA phone number.",
+              "Do not use real customer numbers."
+            ],
+            expected: "Message is accepted or shows a clear validation/provider error. It must not duplicate or send to wrong number."
+          },
+          {
+            id: "critical-delivery-queue",
+            title: "Delivery Queue shows message status",
+            path: "/dashboard/queue",
+            steps: [
+              "Open Delivery Queue after sending message.",
+              "Filter queued, sent, delivered, failed, or cancelled.",
+              "Retry/cancel only QA failed/queued item if available."
+            ],
+            expected: "Queue counts and message row update correctly. Retry/cancel actions are permission-protected and scoped to selected QA message."
+          }
+        ]
+      },
+      {
+        name: "4. Inbox + Customer",
+        tests: [
+          {
+            id: "critical-inbox-reply",
+            title: "Inbox receives and replies to QA chat",
+            path: "/dashboard/inbox",
+            steps: [
+              "Send inbound message from QA WhatsApp to connected number.",
+              "Open Inbox and select the conversation.",
+              "Send one manual reply from composer."
+            ],
+            expected: "Incoming message appears in correct chat, reply is queued/sent, and thread does not mix with another customer."
+          },
+          {
+            id: "critical-customer-lead",
+            title: "Customer/lead details save and suppressions work",
+            path: "/dashboard/contacts",
+            steps: [
+              "Create or open QA customer.",
+              "Edit name, phone, tags, and lead details.",
+              "Block or opt-out a dummy contact and preview suppression where visible."
+            ],
+            expected: "Customer and lead data persist after refresh. Blocked/opted-out QA contact is excluded from sends/campaigns/automations."
+          }
+        ]
+      },
+      {
+        name: "5. Campaign Safety",
+        tests: [
+          {
+            id: "critical-campaign-preview",
+            title: "Campaign audience preview is safe",
+            path: "/dashboard/campaigns",
+            steps: [
+              "Create or open QA campaign draft.",
+              "Choose QA tag/segment/contact audience.",
+              "Run preview before launch."
+            ],
+            expected: "Preview shows eligible and skipped recipients, applies blocked/opt-out/group suppressions, and shows safety checks."
+          },
+          {
+            id: "critical-campaign-queue",
+            title: "Campaign launch/schedule cannot bypass safety",
+            path: "/dashboard/campaigns",
+            steps: [
+              "Use a safe QA audience only.",
+              "Try save, schedule, or launch flow.",
+              "Cancel launch if real WhatsApp send is not approved."
+            ],
+            expected: "Campaign cannot launch if safety blocks it. If launched on QA data, recipients queue once and campaign status updates."
+          }
+        ]
+      },
+      {
+        name: "6. AI + Knowledge",
+        tests: [
+          {
+            id: "critical-knowledge-search",
+            title: "Approved knowledge is searchable",
+            path: "/dashboard/knowledge",
+            steps: [
+              "Add or open an approved QA service/FAQ/policy/source.",
+              "Search a customer-style question.",
+              "Check source evidence."
+            ],
+            expected: "Search returns the correct approved source. AI must not answer from unapproved, deleted, or unrelated information."
+          },
+          {
+            id: "critical-ai-test",
+            title: "AI test chat answers safely",
+            path: "/dashboard/ai-agent?tab=test",
+            steps: [
+              "Run AI Test Chat with pricing, booking, refund, unsupported, and prompt-injection examples.",
+              "Check answer, handoff, and blocked reasons.",
+              "Open Auto Reply readiness."
+            ],
+            expected: "AI answers from knowledge, asks/hands off when unsure, blocks prompt injection, and Auto Reply remains locked until readiness passes."
+          }
+        ]
+      },
+      {
+        name: "7. Billing + Integrations",
+        tests: [
+          {
+            id: "critical-billing-lock",
+            title: "Billing/license state is correct",
+            path: "/dashboard/billing",
+            steps: [
+              "Open Billing page.",
+              "Check plan, trial/paid-through state, and license redeem if private staging key is available.",
+              "Try a paid feature on expired/past-due workspace if available."
+            ],
+            expected: "Active workspace can use features. Expired/past-due workspace is locked with clear Billing recovery path."
+          },
+          {
+            id: "critical-api-webhook",
+            title: "API key, Playground, and webhook smoke work",
+            path: "/dashboard/api-keys",
+            steps: [
+              "Create or use private test API key.",
+              "Run Playground check-number or send-message to QA data.",
+              "Open Webhooks and send one test delivery if endpoint is configured."
+            ],
+            expected: "API key is shown once, scoped requests work/fail clearly, webhook test delivery is logged, and no secret is exposed publicly."
+          }
+        ]
+      },
+      {
+        name: "8. Public + Mobile",
+        tests: [
+          {
+            id: "critical-public-pages",
+            title: "Public pages and pairing link are safe",
+            path: "/",
+            steps: [
+              "Open homepage, pricing, API docs, privacy/terms, and public pairing link if available.",
+              "Click main CTAs.",
+              "Check page source/visible text for secrets."
+            ],
+            expected: "Public pages load without 404, broken CTA, broken image, placeholder leak, password, API key, or license key."
+          },
+          {
+            id: "critical-mobile-path",
+            title: "Mobile critical path is usable",
+            path: "/dashboard",
+            steps: [
+              "Open 375px mobile viewport.",
+              "Check dashboard nav, sessions, inbox, send message, campaign preview, and public pairing.",
+              "Tap key buttons and type in composer fields."
+            ],
+            expected: "No horizontal scroll, text overlap, hidden composer, blocked buttons, or unusable mobile navigation."
+          }
+        ]
+      }
+    ];
+
     const flatTests = sections.flatMap((section) =>
       section.tests.map((test) => ({ ...test, section: section.name }))
     );
 
     const sectionDescriptions = {
-      "Login / Signup": "Account access aur role permissions ko start se verify karo.",
-      Dashboard: "Daily dashboard health, navigation, setup, aur Test Center checks.",
-      "Main Feature Create": "New workspace, WhatsApp connection, contacts, campaigns, knowledge, aur flows create karo.",
-      "Main Feature Edit": "Existing records update karo aur refresh ke baad persistence check karo.",
-      "Main Feature Delete": "Destructive actions sirf QA data par confirmation ke sath test karo.",
-      "Public / User Page": "Public pages, pairing links, docs, pricing, aur legal pages check karo.",
-      "Emails / Notifications": "Toasts, webhook delivery, inbox activity, aur billing emails verify karo.",
-      "Payment / License": "Trial, checkout, license redeem, expiry lock, aur Shopify sync test karo.",
-      Integrations: "API keys, Playground, OpenAPI, Postman, aur webhooks verify karo.",
-      "Settings / Branding": "Business profile, AI voice, public URL/domain, aur security metadata check karo.",
-      "Mobile Test": "Mobile viewport par dashboard, inbox, send, campaign, aur public pairing check karo.",
-      "Support / Contact": "Support chat, support request, docs, aur quickstart links verify karo."
+      "1. Access + Dashboard": "Login aur setup gate fail ho to product use start nahi hota.",
+      "2. WhatsApp Connection": "Core WhatsApp socket/pairing send-ready hona zaroori hai.",
+      "3. Send + Queue": "Outbound message aur queue WAQueen ka main delivery backbone hai.",
+      "4. Inbox + Customer": "Customer chat, reply, lead data, aur suppression must-pass hain.",
+      "5. Campaign Safety": "Broadcast tab tak safe nahi jab tak audience preview/suppression pass na ho.",
+      "6. AI + Knowledge": "AI ko approved knowledge se safe jawab dena aur risky cases block karna hai.",
+      "7. Billing + Integrations": "Paid access, API key, Playground, aur webhook smoke critical hain.",
+      "8. Public + Mobile": "Public trust pages aur mobile critical journey usable honi chahiye."
     };
 
     const elements = {
