@@ -947,7 +947,7 @@
           <li>Fail par screenshot ya short video lazmi hai. Notes field mein bug ka clear reason likhna hai.</li>
           <li>Page refresh ke baad progress lose nahi hoti, kyun ke browser localStorage mein save hoti hai.</li>
           <li>End par Copy report button se summary clipboard mein aa jati hai. Download PDF button current report ka PDF download karta hai.</li>
-          <li>Target timing 45 se 60 minutes hai. Is mein Login, Dashboard, WhatsApp connection, Send, Inbox, Customers, Campaigns, AI, Billing, API/Webhook, Public pages, aur Mobile critical path cover hotay hain.</li>
+          <li>Target timing 45 se 60 minutes hai. Is mein Login, Dashboard, WhatsApp connection, Send, Inbox, Customers, Campaigns, AI testing, Billing, Public pages, aur Mobile critical path cover hotay hain.</li>
         </ol>
       </details>
     </section>
@@ -957,7 +957,7 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
-    const STORAGE_KEY = "waqueen-qa-critical-v2";
+    const STORAGE_KEY = "waqueen-qa-critical-v3";
 
     const archivedFullSections = [
       {
@@ -1901,7 +1901,7 @@
         ]
       },
       {
-        name: "7. Billing + Integrations",
+        name: "7. Billing + AI Testing",
         tests: [
           {
             id: "critical-billing-lock",
@@ -1915,15 +1915,15 @@
             expected: "Active workspace can use features. Expired/past-due workspace is locked with clear Billing recovery path."
           },
           {
-            id: "critical-api-webhook",
-            title: "API key, Playground, and webhook smoke work",
-            path: "/dashboard/api-keys",
+            id: "critical-ai-auto-reply",
+            title: "AI auto-reply readiness is safe",
+            path: "/dashboard/ai-agent",
             steps: [
-              "Create or use private test API key.",
-              "Run Playground check-number or send-message to QA data.",
-              "Open Webhooks and send one test delivery if endpoint is configured."
+              "Open AI Agent settings and readiness checks.",
+              "Try AI off, mention-only, and auto-reply modes on QA workspace.",
+              "Run one QA inbox/test-chat case for unknown question, pricing, and handoff."
             ],
-            expected: "API key is shown once, scoped requests work/fail clearly, webhook test delivery is logged, and no secret is exposed publicly."
+            expected: "Auto Reply cannot turn on until session, knowledge, safety, and fallback checks pass. AI replies only in allowed mode and hands off unsafe or unknown cases."
           }
         ]
       },
@@ -1967,7 +1967,7 @@
       "4. Inbox + Customer": "Customer chat, reply, lead data, aur suppression must-pass hain.",
       "5. Campaign Safety": "Broadcast tab tak safe nahi jab tak audience preview/suppression pass na ho.",
       "6. AI + Knowledge": "AI ko approved knowledge se safe jawab dena aur risky cases block karna hai.",
-      "7. Billing + Integrations": "Paid access, API key, Playground, aur webhook smoke critical hain.",
+      "7. Billing + AI Testing": "Paid access ke sath AI auto-reply readiness aur safety must-pass hain.",
       "8. Public + Mobile": "Public trust pages aur mobile critical journey usable honi chahiye."
     };
 
